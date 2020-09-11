@@ -4,17 +4,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
-import android.widget.ImageView;
+
+
 
 import by.andersen.intern.recyclerviewfigurelist.R;
 import by.andersen.intern.recyclerviewfigurelist.adapter.NumbersFigureAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView numberFigureList;
+    private String[] numberStringArray;
+    int[] image = {
+            R.drawable.circle,
+            R.drawable.triangle,
+            R.drawable.square,
+            R.drawable.oval,
+            R.drawable.pentagon,
+            R.drawable.star,
+            R.drawable.parallelogram,
+            R.drawable.cube,
+            R.drawable.rhombus,
+            R.drawable.trapezium
+
+    };
+
+    private RecyclerView recyclerViewList;
     private NumbersFigureAdapter numbersFigureAdapter;
 
 
@@ -23,18 +37,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numberFigureList = findViewById(R.id.rv_figure_list);
+        numberStringArray = getResources().getStringArray(R.array.figure_string_number);
+        recyclerViewList = findViewById(R.id.rv_figure_list);
 
+        numbersFigureAdapter = new NumbersFigureAdapter(this, numberStringArray, image);
 
+        recyclerViewList.setAdapter(numbersFigureAdapter);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        numberFigureList.setLayoutManager(layoutManager);
+        recyclerViewList.setLayoutManager(new LinearLayoutManager(this));
 
-        numberFigureList.setHasFixedSize(true);
-
-        numbersFigureAdapter = new NumbersFigureAdapter(100);
-        numberFigureList.setAdapter(numbersFigureAdapter);
+//
+//        numbersFigureAdapter = new NumbersFigureAdapter(100);
+//        numberFigureList.setAdapter(numbersFigureAdapter);
     }
 
-
 }
+
+
+
