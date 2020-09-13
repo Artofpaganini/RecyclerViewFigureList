@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">RecycleView</string>
-    <string name="figure_number">Figure Number</string>
-    <string name="title">Title</string>
 
     <string-array name="figure_string_number">
         <item>1(один)</item>

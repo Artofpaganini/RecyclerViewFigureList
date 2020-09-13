@@ -2,49 +2,55 @@ package by.andersen.intern.recyclerviewfigurelist.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AlertDialog;
-
 import androidx.fragment.app.DialogFragment;
-
 import by.andersen.intern.recyclerviewfigurelist.R;
 
-
+/**
+ * Работа с RecyclerView. Список из 10 элементов произвольного содержания (например, геометрические фигуры).
+ * При нажатии отображать AlertDialogFragment с номером элемента (цифрой и, в скобках, словами, например - 1 (первый)).
+ */
 
 public class AlertDialogFragment extends DialogFragment {
+    private static final String TAG = "AlertDialog";
 
-    Button buttonOk;
-    TextView inputTextView;
+    private Button buttonOk;
+    private String transmittedText = null;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.alert_dialog_fragment, container, false);
-        buttonOk = view.findViewById(R.id.buttonOK);
-        inputTextView = view.findViewById(R.id.text_title);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.title)
-                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-               dismiss();
-            }
-        });
-
-
-        return view;
+    public AlertDialogFragment() {
     }
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Log.w(TAG, " i'm here ");
+        
+        if(getArguments() != null) {
+            Bundle bundle = getArguments();
+          transmittedText = bundle.getString("transmitted_text");
+        }
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage(transmittedText)
+                .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (buttonOk == null) {
+                            dismiss();
+                        }
+                    }
+                });
 
+        Log.w(TAG, " done");
+        return builder.create();
+    }
 }
+
+
