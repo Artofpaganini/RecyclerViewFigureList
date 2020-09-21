@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">RecycleView</string>
-    <string name="figure_number"></string>
+
+    <string-array name="figure_string_number">
+        <item>1(один)</item>
+        <item>2(два)</item>
+        <item>3(три)</item>
+        <item>4(четыре)</item>
+        <item>5(пять)</item>
+        <item>6(шесть)</item>
+        <item>7(семь)</item>
+        <item>8(восемь)</item>
+        <item>9(девять)</item>
+        <item>10(десять)</item>
+    </string-array>
+
+    <string name="button_ok">OK</string>
+
 </resources>

@@ -1,7 +1,7 @@
 package by.andersen.intern.recyclerviewfigurelist.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,76 +13,84 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import by.andersen.intern.recyclerviewfigurelist.R;
 
+/**
+ * Работа с RecyclerView. Список из 10 элементов произвольного содержания (например, геометрические фигуры).
+ * При нажатии отображать AlertDialogFragment с номером элемента (цифрой и, в скобках, словами, например - 1 (первый)).
+ */
+
 public class NumbersFigureAdapter extends RecyclerView.Adapter<NumbersFigureAdapter.NumberViewHolder> {
+    private Context context;
+    private String[] numberStringArray;
+    private int[] imagesArray;
+    private OnNoteListener mOnNoteListener;
 
-    private int numbersFigures;
 
-
-
-    public NumbersFigureAdapter(int numbersFigures) {
-        this.numbersFigures = numbersFigures;
+    public NumbersFigureAdapter(Context context, String[] numberStringArray, int[] imagesArray, OnNoteListener mOnNoteListener) {
+        this.context = context;
+        this.numberStringArray = numberStringArray;
+        this.imagesArray = imagesArray;
+        this.mOnNoteListener = mOnNoteListener;
     }
 
-    //начальное создание  Н-е кол-во  вьюхолдеров
     @NonNull
     @Override
-    public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-
+    public NumberViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         int layoutIdForListItem = R.layout.number_list_item;
 
-
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-        //  тут  мы получили  наше предсталвение  из  xml  в java
         View view = layoutInflater.inflate(layoutIdForListItem, parent, false);
-
-        //оборачивает во вьюхолдер, это позволит переиспользовать
-        NumberViewHolder viewHolder = new NumberViewHolder(view);
+        NumberViewHolder viewHolder = new NumberViewHolder(view, mOnNoteListener);
 
         return viewHolder;
     }
 
-    //вместо новых  вьюхолдеров ,  задаем новые значения   созданным ранее вьюхолдерам
     @Override
-    public void onBindViewHolder(@NonNull NumberViewHolder holder, int position) {
-        holder.bind(position);
+    public void onBindViewHolder(@NonNull NumberViewHolder holder, final int position) {
+
+        holder.numbersFigureView.setText(numberStringArray[position]);
+        holder.imageFigureView.setImageResource(imagesArray[position]);
+
     }
 
-    //общее кол-во  вьюхолдеров
     @Override
     public int getItemCount() {
-        return numbersFigures;
+        return imagesArray.length;
     }
 
-    class NumberViewHolder extends RecyclerView.ViewHolder {
 
-        TextView listNumbersFigureView;
+    class NumberViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView numbersFigureView;
         ImageView imageFigureView;
-         int [] figureArray = {
+        OnNoteListener onNoteListener;
 
-                R.drawable.triangle,
-                R.drawable.square
-        };
-
-
-        // оборачивает элемент списка,
-        public NumberViewHolder(@NonNull View itemView) {
+        /**
+         * wraps a list item and make 1 view clickable  and second view not
+         *
+         * @param itemView
+         * @param onNoteListener
+         */
+        public NumberViewHolder(@NonNull View itemView, OnNoteListener onNoteListener) {
             super(itemView);
 
-            listNumbersFigureView = itemView.findViewById(R.id.tv_number_image);
+            numbersFigureView = itemView.findViewById(R.id.tv_number_image);
             imageFigureView = itemView.findViewById(R.id.iv_figure);
 
+            this.onNoteListener = onNoteListener;
 
-            for (int i = 0; i <figureArray.length ; i++) {
-                imageFigureView.setImageResource(figureArray[i]);
-            }
+            imageFigureView.setClickable(false);
+            numbersFigureView.setOnClickListener(this);
+
 
         }
 
-        //возможно тут  нужно  удет делать цикл или вставлять  массив  строк
-        void bind(int listIndex) {
-            listNumbersFigureView.setText(String.valueOf(listIndex));
+        @Override
+        public void onClick(View view) {
+            onNoteListener.onNoteClick(getAdapterPosition());
         }
+    }
+
+    public interface OnNoteListener {
+        void onNoteClick(int position);
     }
 }
